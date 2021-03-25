@@ -6,7 +6,7 @@ export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
-      messages: [],
+      messages: [], // Messages are stored in state
     };
   }
   componentDidMount() {
