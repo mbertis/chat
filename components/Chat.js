@@ -1,6 +1,6 @@
 import React from "react";
 import { View, Platform, KeyboardAvoidingView } from "react-native";
-import { GiftedChat } from "react-native-gifted-chat";
+import { Bubble, GiftedChat } from "react-native-gifted-chat";
 
 export default class Chat extends React.Component {
   constructor() {
@@ -22,6 +22,12 @@ export default class Chat extends React.Component {
             avatar: "https://placeimg.com/140/140/any",
           },
         },
+        {
+          _id: 2,
+          text: "This is a system message",
+          createdAt: new Date(),
+          system: true,
+        },
       ],
     });
   }
@@ -31,6 +37,19 @@ export default class Chat extends React.Component {
     this.setState((previousState) => ({
       messages: GiftedChat.append(previousState.messages, messages),
     }));
+  }
+
+  renderBubble(props) {
+    return (
+      <Bubble
+        {...props}
+        wrapperStyle={{
+          right: {
+            backgroundColor: "#000", // Target right or left bubbles respectively
+          },
+        }}
+      />
+    );
   }
 
   render() {
@@ -45,17 +64,17 @@ export default class Chat extends React.Component {
         }}
       >
         <GiftedChat
+          renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
-          onSend={messages => this.onSend(messages)}
+          onSend={(messages) => this.onSend(messages)}
           user={{
             _id: 1,
           }}
-          style={{backgroundColor: color}}
-          />
+        />
         {/* No need to add navigation here as Stack.Navigator automatically adds navigation to the top of the screen */}
-      {Platform.OS === "android" ? (
-        <KeyboardAvoidingView behavior="height" />
-      ) : null}
+        {Platform.OS === "android" ? (
+          <KeyboardAvoidingView behavior="height" />
+        ) : null}
       </View>
     );
   }
