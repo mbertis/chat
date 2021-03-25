@@ -8,7 +8,8 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Platform
 } from "react-native";
 
 export default class Start extends React.Component {

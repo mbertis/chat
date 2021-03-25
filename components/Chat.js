@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { View, Platform, KeyboardAvoidingView } from "react-native";
 import { GiftedChat } from "react-native-gifted-chat";
 
 export default class Chat extends React.Component {
@@ -53,6 +53,9 @@ export default class Chat extends React.Component {
           style={{backgroundColor: color}}
           />
         {/* No need to add navigation here as Stack.Navigator automatically adds navigation to the top of the screen */}
+      {Platform.OS === "android" ? (
+        <KeyboardAvoidingView behavior="height" />
+      ) : null}
       </View>
     );
   }
