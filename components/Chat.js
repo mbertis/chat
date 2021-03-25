@@ -9,7 +9,9 @@ export default class Chat extends React.Component {
       messages: [], // Messages are stored in state
     };
   }
+
   componentDidMount() {
+    let joinMessage = `${this.props.route.params.name} has entered the chat`;
     this.setState({
       messages: [
         {
@@ -24,7 +26,7 @@ export default class Chat extends React.Component {
         },
         {
           _id: 2,
-          text: "This is a system message",
+          text: joinMessage,
           createdAt: new Date(),
           system: true,
         },
