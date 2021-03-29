@@ -9,15 +9,16 @@ import {
   Image,
   TouchableOpacity,
   KeyboardAvoidingView,
-  Platform
+  Platform,
 } from "react-native";
 
 export default class Start extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-    name: "",
-    color: "" };
+    this.state = {
+      name: "",
+      color: "",
+    };
   }
   render() {
     return (
@@ -25,7 +26,6 @@ export default class Start extends React.Component {
         source={require("../assets/Background_Image.png")}
         style={styles.image}
       >
-        <KeyboardAvoidingView behavior="height">
         <View style={styles.container}>
           <Text style={styles.title}>Let's Chat</Text>
           <View style={styles.smallContainer}>
@@ -48,44 +48,46 @@ export default class Start extends React.Component {
             <View style={styles.colorContainer}>
               <TouchableOpacity
                 style={styles.color1}
-                onPress={() =>
-                  {this.setState({ color: "#090c08" })}
-                }
+                onPress={() => {
+                  this.setState({ color: "#090c08" });
+                }}
               ></TouchableOpacity>
               <TouchableOpacity
                 style={styles.color2}
-                onPress={() =>
-                  {this.setState({ color: "#474056" })}
-                }
+                onPress={() => {
+                  this.setState({ color: "#474056" });
+                }}
               ></TouchableOpacity>
               <TouchableOpacity
                 style={styles.color3}
-                onPress={() =>
-                  {this.setState({ color: "#8a95a5" })}
-                }
+                onPress={() => {
+                  this.setState({ color: "#8a95a5" });
+                }}
               ></TouchableOpacity>
               <TouchableOpacity
                 style={styles.color4}
-                onPress={() =>
-                  {this.setState({ color: "#b9c6ae" })}
-                }
+                onPress={() => {
+                  this.setState({ color: "#b9c6ae" });
+                }}
               ></TouchableOpacity>
             </View>
 
             <TouchableOpacity
               style={styles.button}
               onPress={() =>
-                this.props.navigation.navigate(
-                  "Chat",
-                  { name: this.state.name, color: this.state.color }
-                )
-              }>
+                this.props.navigation.navigate("Chat", {
+                  name: this.state.name,
+                  color: this.state.color,
+                })
+              }
+            >
               <Text style={styles.buttonText}>Start Chatting</Text>
             </TouchableOpacity>
-            
-            </View>
+          </View>
+          {Platform.OS === "android" ? (
+            <KeyboardAvoidingView behavior="height" />
+          ) : null}
         </View>
-        </KeyboardAvoidingView>
       </ImageBackground>
     );
   }
@@ -99,11 +101,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   smallContainer: {
-    flex: 1,
     width: 380,
     backgroundColor: "white",
     flexDirection: "column",
-    marginBottom: "8%",
     justifyContent: "center",
   },
   image: {
@@ -119,10 +119,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   textBoxWrapper: {
-    flex: 0.5,
     flexDirection: "row",
     color: "white",
-    height: 40,
     borderColor: "gray",
     borderWidth: 1,
     textAlign: "left",
@@ -135,7 +133,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 45,
     fontWeight: "600",
-    marginTop: "20%",
+    margin: "5%",
     flex: 0.75,
   },
   imageStyle: {
@@ -147,7 +145,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   backgroundSelector: {
-    flex: 0.5,
     fontSize: 16,
     fontWeight: "300",
     color: "#757083",
@@ -155,10 +152,9 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   colorContainer: {
-    flex: 1,
     flexDirection: "row",
     marginLeft: 20,
-    width: 275,  
+    width: 275,
     marginBottom: 20,
   },
   color1: {
@@ -201,5 +197,5 @@ const styles = StyleSheet.create({
     textAlign: "center",
     margin: 10,
     padding: 10,
-  }
+  },
 });
