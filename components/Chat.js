@@ -9,9 +9,8 @@ export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
-      messages: [],
-      loggedInText: "Please wait, you are being logged in" // Messages are stored in state
-    };
+      messages: [], // Messages are stored in state
+        };
 
     if(!firebase.apps.length) {
       firebase.initializeApp({
@@ -34,8 +33,8 @@ export default class Chat extends React.Component {
       }
       this.setState({
         uid: user.uid,
-        loggedInText: "Hello there",
       });
+      this.referenceChatMessages = firebase.firestore().collection("messages");
       // orders messages by date/timestamp
       this.unsubscribeChatUser = this.referenceChatMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
     });
@@ -90,11 +89,11 @@ export default class Chat extends React.Component {
   }
 
   addMessage() {
-    const messages = this.state.messages[0];
+    const message = this.state.messages[0];
     this.referenceChatMessages.add({
-      text: messages.text,
-      createdAt: messages.createdAt,
-      user: messages.user,
+      text: message.text,
+      createdAt: message.createdAt,
+      user: message.user,
     });
   }
 
@@ -130,9 +129,6 @@ export default class Chat extends React.Component {
           backgroundColor: color,
         }}
       >
-        <Text
-          style={{
-            textAlign: "center", opacity: 50, color: "gray"}}>{this.state.loggedInText}</Text>
         <GiftedChat
           renderBubble={this.renderBubble.bind(this)}
           messages={this.state.messages}
