@@ -28,8 +28,6 @@ export default class Chat extends React.Component {
   }
 
   componentDidMount() {
-    
-
     this.authUnsubscribe = firebase.auth().onAuthStateChanged(async (user) => {
       if (!user) {
         await firebase.auth().signInAnonymously();
@@ -38,8 +36,8 @@ export default class Chat extends React.Component {
         uid: user.uid,
         loggedInText: "Hello there",
       });
-      this.referenceChatMessagesUser = null;
-      this.unsubscribeChatUser = this.referenceChatMessages.onSnapshot(this.onCollectionUpdate);
+      // orders messages by date/timestamp
+      this.unsubscribeChatUser = this.referenceChatMessages.orderBy("createdAt", "desc").onSnapshot(this.onCollectionUpdate);
     });
 
     
@@ -85,6 +83,9 @@ export default class Chat extends React.Component {
         createdAt: data.createdAt.toDate(),
         user: data.user,
       });
+    });
+    this.setState({
+      messages,
     });
   }
 
