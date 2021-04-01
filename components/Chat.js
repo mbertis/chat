@@ -33,6 +33,7 @@ export default class Chat extends React.Component {
       }
       this.setState({
         uid: user.uid,
+        messages: [],
       });
       this.referenceChatMessages = firebase.firestore().collection("messages");
       // orders messages by date/timestamp
@@ -43,16 +44,6 @@ export default class Chat extends React.Component {
     let joinMessage = `${this.props.route.params.name} has entered the chat`;
     this.setState({
       messages: [
-        // {
-        //   _id: 1,
-        //   text: "Hello Developer",
-        //   createdAt: new Date(),
-        //   user: {
-        //     _id: 2,
-        //     name: "React Native",
-        //     avatar: "https://placeimg.com/140/140/any",
-        //   },
-        // },
         {
           _id: 2,
           text: joinMessage,
