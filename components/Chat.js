@@ -9,7 +9,11 @@ export default class Chat extends React.Component {
   constructor() {
     super();
     this.state = {
-      messages: [], // Messages are stored in state
+      messages: [],
+      user: {
+        _id: "",
+        name: "",
+      } // Messages are stored in state
         };
 
     if(!firebase.apps.length) {
@@ -32,8 +36,11 @@ export default class Chat extends React.Component {
         await firebase.auth().signInAnonymously();
       }
       this.setState({
-        uid: user.uid,
         messages: [],
+        user: {
+          _id: user.uid,
+          name: this.props.route.params.name,
+        }
       });
       this.referenceChatMessages = firebase.firestore().collection("messages");
       // orders messages by date/timestamp
@@ -41,17 +48,17 @@ export default class Chat extends React.Component {
     });
 
     
-    let joinMessage = `${this.props.route.params.name} has entered the chat`;
-    this.setState({
-      messages: [
-        {
-          _id: 2,
-          text: joinMessage,
-          createdAt: new Date(),
-          system: true,
-        },
-      ],
-    });
+    // let joinMessage = `${this.props.route.params.name} has entered the chat`;
+    // this.setState({
+    //   messages: [
+    //     {
+    //       _id: 2,
+    //       text: joinMessage,
+    //       createdAt: new Date(),
+    //       system: true,
+    //     },
+    //   ],
+    // });
   }
 
   componentWillUnmount() {
@@ -82,6 +89,7 @@ export default class Chat extends React.Component {
   addMessage() {
     const message = this.state.messages[0];
     this.referenceChatMessages.add({
+      _id: message._id,
       text: message.text,
       createdAt: message.createdAt,
       user: message.user,
