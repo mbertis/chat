@@ -3,6 +3,8 @@ import AsyncStorage from "@react-native-community/async-storage";
 import NetInfo from "@react-native-community/netinfo";
 import { View, Platform, KeyboardAvoidingView, Text } from "react-native";
 import { Bubble, GiftedChat, InputToolbar } from "react-native-gifted-chat";
+import MapView from "react-native-maps";
+import CustomActions from "./CustomActions";
 
 const firebase = require("firebase");
 require("firebase/firestore");
@@ -15,8 +17,11 @@ export default class Chat extends React.Component {
       user: {
         _id: "",
         name: "",
-      }, 
+      },
       isConnected: false,
+      image: null,
+      location: null,
+      uid: 0,
     };
 
     if (!firebase.apps.length) {
@@ -99,6 +104,8 @@ export default class Chat extends React.Component {
         text: data.text,
         createdAt: data.createdAt.toDate(),
         user: data.user,
+        image: data.image || null,
+        location: data.location || null,
       });
     });
     this.setState({
@@ -113,6 +120,8 @@ export default class Chat extends React.Component {
       text: message.text,
       createdAt: message.createdAt,
       user: message.user,
+      image: message.image || null,
+      location: message.location || null,
     });
   }
 
@@ -146,20 +155,38 @@ export default class Chat extends React.Component {
       }),
       () => {
         this.addMessage();
-      this.saveMessages();
+        this.saveMessages();
       }
     );
+  }
+
+  renderCustomActions = (props) => {
+    return <CustomActions {...props} />;
+  };
+
+  renderCustomView(props) {
+    const { currentMessage } = props;
+    if (currentMessage.location) {
+      return (
+        <MapView
+          style={{ width: 200, height: 150, borderRadius: 13, margin: 3 }}
+          region={{
+            latitude: currentMessage.location.latitude,
+            longitude: currentMessage.location.longitude,
+            latitudeDelta: 0.0922,
+            longitudeDelta: 0.0421,
+          }}
+        />
+      );
+    }
+    return null;
   }
 
   // only renders input toolbar when user is online (prevents users from sending messages when offline)
   renderInputToolbar(props) {
     if (this.state.isConnected == false) {
     } else {
-      return (
-        <InputToolbar
-        {...props}
-        />
-      );
+      return <InputToolbar {...props} />;
     }
   }
 
@@ -169,7 +196,7 @@ export default class Chat extends React.Component {
         {...props}
         wrapperStyle={{
           right: {
-            backgroundColor: "#000", // Target right or left bubbles respectively
+            backgroundColor: "#774558", // Target right or left bubbles respectively
           },
         }}
       />
@@ -193,6 +220,9 @@ export default class Chat extends React.Component {
           onSend={(messages) => this.onSend(messages)}
           user={this.state.user}
           renderInputToolbar={this.renderInputToolbar.bind(this)}
+          renderActions={this.renderCustomActions}
+          image={this.state.image}
+          renderCustomView={this.renderCustomView}
         />
         {/* No need to add navigation here as Stack.Navigator automatically adds navigation to the top of the screen */}
         {Platform.OS === "android" ? (
@@ -202,3 +232,4 @@ export default class Chat extends React.Component {
     );
   }
 }
+
